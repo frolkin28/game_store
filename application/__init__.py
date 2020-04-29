@@ -10,11 +10,15 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(DevConfig)
     db.init_app(app)
-    api = Api(app)
+    api = Api(app, prefix='/api/v1')
     register_endpoints(api)
 
     return app
 
 
 def register_endpoints(api):
-    api.add_resource(endpoints.UserApi, "/users")
+    api.add_resource(endpoints.UserApi, '/user', '/user/<uuid>')
+    api.add_resource(endpoints.GameApi, '/game', '/game/<uuid>')
+    api.add_resource(endpoints.GamesApi, '/games')
+    api.add_resource(endpoints.GenreApi, '/genre', '/genre/<title>')
+    api.add_resource(endpoints.InitSubgenres, '/subgenres')
