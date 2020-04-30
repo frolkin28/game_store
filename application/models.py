@@ -66,3 +66,27 @@ class Genre(db.Model):
         primaryjoin=("Genre.id==genre_subgenre.c.subgenre_id"),
         secondaryjoin=("Genre.id==genre_subgenre.c.genre_id"),
     )
+
+
+comment_reply = db.Table(
+    "comment_reply",
+    db.Column("comment_id", db.Integer, db.ForeignKey("comments.id")),
+    db.Column("reply_id", db.Integer, db.ForeignKey("comments.id")),
+)
+
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text())
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    author = db.relationship("User")
+    game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
+    game = author = db.relationship("Game")
+    replies = db.relationship(
+        "Comment",
+        secondary=comment_reply,
+        primaryjoin=("Comment.id==comment_reply.c.reply_id"),
+        secondaryjoin=("Comment.id==comment_reply.c.comment_id"),
+    )
