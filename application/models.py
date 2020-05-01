@@ -38,7 +38,7 @@ class Game(db.Model):
     details = db.Column(db.Text())
     price = db.Column(db.Float())
     genres = db.relationship(
-        "Game", secondary=game_genre, backref=db.backref("games", lazy="dynamic")
+        "Genre", secondary=game_genre, backref=db.backref("games", lazy="dynamic")
     )
 
     def __init__(self, title, details, price):
@@ -90,3 +90,39 @@ class Comment(db.Model):
         primaryjoin=("Comment.id==comment_reply.c.reply_id"),
         secondaryjoin=("Comment.id==comment_reply.c.comment_id"),
     )
+
+
+cart_game = db.Table(
+    "cart_game",
+    db.Column("game_id", db.Integer, db.ForeignKey("games.id")),
+    db.Column("cart_id", db.Integer, db.ForeignKey("cart.id")),
+)
+
+
+class Cart(db.Model):
+    __tablename__ = "cart"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship("User")
+    games = db.relationship("Game", secondary=cart_game, lazy="dynamic")
+
+
+class GamePhoto(db.Model):
+    __tablename__ = "game_photo"
+
+    id = db.Column(db.Integer, primary_key=True)
+    path = db.Column(db.String(255), unique=True)
+    url = db.Column(db.String(255))
+    game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
+    game = db.relationship("Game")
+
+
+class AvatarImage(db.Model):
+    __tablename__ = "avatar_image"
+
+    id = db.Column(db.Integer, primary_key=True)
+    path = db.Column(db.String(255), unique=True)
+    url = db.Column(db.String(255))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship("User")
