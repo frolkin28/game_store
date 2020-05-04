@@ -51,3 +51,11 @@ class CommentGetSchema(SQLAlchemyAutoSchema):
         model = models.Comment
         exclude = ("author_id", "game_id")
         load_instance = True
+
+
+class CartSchema(SQLAlchemyAutoSchema):
+    games = fields.Nested(GameSchema, many=True)
+    user = fields.Nested(UserGetSchema)
+
+    class Meta:
+        model = models.Cart

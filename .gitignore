@@ -4,3 +4,4 @@ __pycache__/
 .env
 setup_ex
 migrations/
+setup_ex

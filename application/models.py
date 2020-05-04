@@ -11,7 +11,7 @@ class User(db.Model):
     uuid = db.Column(db.String(36), unique=True)
     first_name = db.Column(db.String(60))
     second_name = db.Column(db.String(60))
-    email = db.Column(db.String(120))
+    email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(94))
 
     def __init__(self, first_name, second_name, email, password):
