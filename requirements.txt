@@ -18,7 +18,7 @@ cupshelpers==1.0
 cycler==0.10.0
 defer==1.0.6
 distro-info===0.18ubuntu0.18.04.1
-Django==1.11.11
+Django==1.11.28
 entrypoints==0.3
 flake8==3.7.9
 Flask==1.1.1
