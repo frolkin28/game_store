@@ -25,3 +25,32 @@ def login():
         BaseConfig.SECRET_KEY,
     )
     return jsonify({"token": token.decode("utf-8")})
+
+
+def token_required(f):
+    def wrapper(self, *args, **kwargs):
+        token = request.headers.get("token", "")
+        if not token:
+            return (
+                "",
+                401,
+                {"WWW-Authenticate": 'Basic realm="Authentication required"'},
+            )
+        try:
+            uuid = jwt.decode(token, BaseConfig.SECRET_KEY)["user_id"]
+        except (KeyError, jwt.ExpiredSignatureError):
+            return (
+                "",
+                401,
+                {"WWW-Authenticate": 'Basic realm="Authentication required"'},
+            )
+        user = db.session.query(models.User).filter_by(uuid=uuid).first()
+        if not user:
+            return (
+                "",
+                401,
+                {"WWW-Authenticate": 'Basic realm="Authentication required"'},
+            )
+        return f(self, user, *args, **kwargs)
+
+    return wrapper

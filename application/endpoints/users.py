@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from application import schemas
 from application import models
 from application.database import db
+from application.endpoints import auth
 
 
 user_schema = schemas.UserSchema()
@@ -13,7 +14,7 @@ user_get_schema = schemas.UserGetSchema()
 
 
 class UserApi(Resource):
-    def get(self, uuid=None):
+    def get(self, user, uuid=None):
         if not uuid:
             return "", 404
         user = db.session.query(models.User).filter_by(uuid=uuid).first()
