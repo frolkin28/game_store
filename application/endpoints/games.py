@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError, ProgrammingError
 from application import schemas
 from application import models
 from application.database import db
+from application.endpoints import auth
 
 game_schema = schemas.GameSchema()
 genre_schema = schemas.GenreSchema()
@@ -20,6 +21,7 @@ class GameApi(Resource):
             return "", 404
         return game_schema.dump(game), 200
 
+    @auth.token_required
     def post(self):
         try:
             game = game_schema.load(request.json, session=db.session)
@@ -31,6 +33,25 @@ class GameApi(Resource):
         except IntegrityError:
             return {"message": "Game exists"}, 409
         return game_schema.dump(game), 201
+
+    @auth.token_required
+    def put(self, uuid):
+        game = db.session.query(models.Game).filter_by(uuid=uuid).first()
+        if not game:
+            return "", 404
+        game = game_schema.load(request.json, instance=game, session=db.session)
+        db.session.add(game)
+        db.session.commit()
+        return game_schema.dump(game), 200
+
+    @auth.token_required
+    def delete(self, uuid):
+        game = db.session.query(models.Game).filter_by(uuid=uuid).first
+        if not game:
+            return "", 404
+        db.session.delete(game)
+        db.session.commit()
+        return "", 204
 
 
 class GamesApi(Resource):
@@ -48,6 +69,7 @@ class GenreApi(Resource):
             return "", 404
         return genre_schema.dump(genre), 200
 
+    @auth.token_required
     def post(self):
         try:
             genre = genre_schema.load(request.json, session=db.session)
@@ -62,6 +84,7 @@ class GenreApi(Resource):
 
 
 class InitSubgenres(Resource):
+    @auth.token_required
     def post(self):
         try:
             genre_title = request.json.get("genre", None)

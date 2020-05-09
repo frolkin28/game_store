@@ -1,6 +1,7 @@
 import uuid
 from werkzeug.security import generate_password_hash
 
+import config
 from application.database import db
 
 
@@ -13,6 +14,9 @@ class User(db.Model):
     second_name = db.Column(db.String(60))
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(94))
+    role = db.Column(
+        db.Enum(config.RolesEnum), nullable=False, default=config.RolesEnum.user.name
+    )
 
     def __init__(self, first_name, second_name, email, password):
         self.uuid = str(uuid.uuid4())
@@ -83,7 +87,7 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = db.relationship("User")
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
-    game = author = db.relationship("Game")
+    game = db.relationship("Game")
     replies = db.relationship(
         "Comment",
         secondary=comment_reply,

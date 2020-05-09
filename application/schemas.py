@@ -38,18 +38,19 @@ class GameSchema(SQLAlchemyAutoSchema):
 
 class CommentPostSchema(SQLAlchemyAutoSchema):
     class Meta:
+        include_fk = True
         model = models.Comment
         load_instance = True
 
 
 class CommentGetSchema(SQLAlchemyAutoSchema):
-    author = fields.Nested(UserGetSchema, many=True)
-    game = fields.Nested(GameSchema, many=True)
+    author = fields.Nested(UserGetSchema)
+    game = fields.Nested(GameSchema)
     replies = fields.Nested("self", many=True)
 
     class Meta:
         model = models.Comment
-        exclude = ("author_id", "game_id")
+        exclude = ("author_id", "game_id", "id")
         load_instance = True
 
 

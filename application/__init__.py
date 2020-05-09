@@ -24,6 +24,7 @@ def register_endpoints(api):
     api.add_resource(endpoints.GamesApi, "/games")
     api.add_resource(endpoints.GenreApi, "/genre", "/genre/<title>")
     api.add_resource(endpoints.InitSubgenres, "/subgenres")
+    api.add_resource(endpoints.CommentApi, "/comment", "/comment/<game_id>")
 
 
 def register_blueprints(app):
