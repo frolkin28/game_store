@@ -1,3 +1,4 @@
+import datetime
 import uuid
 from werkzeug.security import generate_password_hash
 
@@ -18,12 +19,13 @@ class User(db.Model):
         db.Enum(config.RolesEnum), nullable=False, default=config.RolesEnum.user.name
     )
 
-    def __init__(self, first_name, second_name, email, password):
+    def __init__(self, first_name, second_name, email, password, role=None):
         self.uuid = str(uuid.uuid4())
         self.first_name = first_name
         self.second_name = second_name
         self.email = email
         self.password = generate_password_hash(password)
+        self.role = role
 
 
 game_genre = db.Table(
@@ -42,7 +44,10 @@ class Game(db.Model):
     details = db.Column(db.Text())
     price = db.Column(db.Float())
     genres = db.relationship(
-        "Genre", secondary=game_genre, backref=db.backref("games", lazy="dynamic")
+        "Genre",
+        secondary=game_genre,
+        lazy="subquery",
+        backref=db.backref("games", lazy=True),
     )
 
     def __init__(self, title, details, price):
@@ -52,24 +57,13 @@ class Game(db.Model):
         self.price = price
 
 
-genre_subgenre = db.Table(
-    "genre_subgenre",
-    db.Column("genre_id", db.Integer, db.ForeignKey("genres.id")),
-    db.Column("subgenre_id", db.Integer, db.ForeignKey("genres.id")),
-)
-
-
 class Genre(db.Model):
     __tablename__ = "genres"
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), unique=True)
-    subgenres = db.relationship(
-        "Genre",
-        secondary=genre_subgenre,
-        primaryjoin=("Genre.id==genre_subgenre.c.subgenre_id"),
-        secondaryjoin=("Genre.id==genre_subgenre.c.genre_id"),
-    )
+    parent_id = db.Column(db.Integer, db.ForeignKey("genres.id"))
+    parent_genre = db.relationship("Genre", remote_side=[id])
 
 
 comment_reply = db.Table(
@@ -83,7 +77,10 @@ class Comment(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text())
+    time_left = db.Column(
+        db.DateTime, nullable=False, default=datetime.datetime.utcnow
+    )
+    content = db.Column(db.Text(length=600))
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = db.relationship("User")
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"))

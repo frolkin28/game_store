@@ -13,6 +13,10 @@ comment_schema = schemas.CommentPostSchema()
 comment_get_schema = schemas.CommentGetSchema()
 
 
+def check_comment_owner(user, comment):
+    return comment.author.uuid == user.uuid
+
+
 class CommentApi(Resource):
     def get(self, game_id=None):
         if not game_id:
@@ -37,3 +41,28 @@ class CommentApi(Resource):
         except IntegrityError:
             return {"message": "Comment exists"}, 409
         return comment_schema.dump(comment), 201
+
+    @auth.token_required
+    def put(self, user, id=None):
+        if not id:
+            return "", 400
+        comment = models.Comment.query.get(id)
+        if not comment or not check_comment_owner(user, comment):
+            return "", 404
+        comment = comment_schema.load(
+            request.json, instance=comment, session=db.session
+        )
+        db.session.add(comment)
+        db.session.commit()
+        return comment_schema.dump(comment), 200
+
+    @auth.token_required
+    def delete(self, user, id=None):
+        if not id:
+            return "", 400
+        comment = models.Comment.query.get(id)
+        if not comment or not check_comment_owner(user, comment):
+            return "", 404
+        db.session.delete(comment)
+        db.session.commit()
+        return "", 204

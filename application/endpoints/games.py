@@ -22,7 +22,8 @@ class GameApi(Resource):
         return game_schema.dump(game), 200
 
     @auth.token_required
-    def post(self):
+    @auth.managers_only
+    def post(self, user):
         try:
             game = game_schema.load(request.json, session=db.session)
         except ValidationError as e:
@@ -35,7 +36,8 @@ class GameApi(Resource):
         return game_schema.dump(game), 201
 
     @auth.token_required
-    def put(self, uuid):
+    @auth.managers_only
+    def put(self, user, uuid):
         game = db.session.query(models.Game).filter_by(uuid=uuid).first()
         if not game:
             return "", 404
@@ -45,8 +47,9 @@ class GameApi(Resource):
         return game_schema.dump(game), 200
 
     @auth.token_required
-    def delete(self, uuid):
-        game = db.session.query(models.Game).filter_by(uuid=uuid).first
+    @auth.managers_only
+    def delete(self, user, uuid):
+        game = db.session.query(models.Game).filter_by(uuid=uuid).first()
         if not game:
             return "", 404
         db.session.delete(game)
@@ -70,7 +73,8 @@ class GenreApi(Resource):
         return genre_schema.dump(genre), 200
 
     @auth.token_required
-    def post(self):
+    @auth.managers_only
+    def post(self, user):
         try:
             genre = genre_schema.load(request.json, session=db.session)
         except ValidationError as e:
@@ -83,31 +87,30 @@ class GenreApi(Resource):
         return genre_schema.dump(genre), 201
 
 
-class InitSubgenres(Resource):
+class GameAssignGenre(Resource):
     @auth.token_required
-    def post(self):
-        try:
-            genre_title = request.json.get("genre", None)
+    @auth.managers_only
+    def post(self, user):
+        game_title = request.json.get("game_title", None)
+        genre_titles = request.json.get("genres", None)
 
-            if not genre_title:
-                return "", 400
-            genre = db.session.query(models.Genre).filter_by(title=genre_title).first()
-            if not genre:
-                return {"message": str(ValidationError("Invalid genre field"))}, 400
-
-            subgenres_titles = request.json.get("subgenres", None)
-
-            if not subgenres_titles:
-                return {"message": str(ValidationError("Invalid subgenres field"))}, 400
-            subgenres = (
-                db.session.query(models.Genre)
-                .filter(models.Genre.title.in_(subgenres_titles))
-                .all()
-            )
-            if len(subgenres_titles) != len(subgenres):
-                return "", 404
-        except ProgrammingError:
+        if not game_title or not genre_titles:
             return "", 400
-        genre.subgenres.extend(list(subgenres))
+
+        game = db.session.query(models.Game).filter_by(title=game_title).first()
+        if not game:
+            return "", 400
+
+        genres = (
+            db.session.query(models.Genre)
+            .filter(models.Genre.title.in_(genre_titles))
+            .all()
+        )
+        if len(genres) != len(genre_titles):
+            return "", 400
+
+        game.genres.extend(list(genres))
+        db.session.add(game)
         db.session.commit()
-        return "Subgenres assigned", 200
+
+        return "Genres assigned", 200

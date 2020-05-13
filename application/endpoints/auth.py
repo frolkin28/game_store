@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
 
 from application import models
-from config import BaseConfig
+from config import BaseConfig, RolesEnum
 from application.database import db
 
 login_blueprint = Blueprint("login", __name__)
@@ -51,6 +51,24 @@ def token_required(f):
                 401,
                 {"WWW-Authenticate": 'Basic realm="Authentication required"'},
             )
+        return f(self, user, *args, **kwargs)
+
+    return wrapper
+
+
+def managers_only(f):
+    def wrapper(self, user, *args, **kwargs):
+        if user.role != RolesEnum.manager:
+            return "", 405
+        return f(self, user, *args, **kwargs)
+
+    return wrapper
+
+
+def admins_only(f):
+    def wrapper(self, user, *args, **kwargs):
+        if user.role != RolesEnum.admin:
+            return "", 405
         return f(self, user, *args, **kwargs)
 
     return wrapper

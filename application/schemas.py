@@ -1,10 +1,14 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from marshmallow import fields
+from marshmallow_enum import EnumField
 
 from application import models
+import config
 
 
 class UserSchema(SQLAlchemyAutoSchema):
+    role = EnumField(config.RolesEnum)
+
     class Meta:
         model = models.User
         exclude = ("id",)
@@ -12,6 +16,8 @@ class UserSchema(SQLAlchemyAutoSchema):
 
 
 class UserGetSchema(SQLAlchemyAutoSchema):
+    role = EnumField(config.RolesEnum)
+
     class Meta:
         model = models.User
         exclude = ("id", "password")
@@ -19,16 +25,24 @@ class UserGetSchema(SQLAlchemyAutoSchema):
 
 
 class GenreSchema(SQLAlchemyAutoSchema):
-    subgenres = fields.Nested("self", many=True)
+    parent_genre = fields.Nested("self")
     games = fields.Nested("GameSchema", many=True)
 
     class Meta:
+        include_fk = True
         model = models.Genre
         load_instance = True
 
 
+class GenreGetSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = models.Genre
+        load_instance = True
+        exclude = ("id", "games", "parent_genre")
+
+
 class GameSchema(SQLAlchemyAutoSchema):
-    genres = fields.Nested(GenreSchema, many=True)
+    genres = fields.Nested(GenreGetSchema, many=True)
 
     class Meta:
         model = models.Game

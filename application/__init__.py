@@ -23,8 +23,10 @@ def register_endpoints(api):
     api.add_resource(endpoints.GameApi, "/game", "/game/<uuid>")
     api.add_resource(endpoints.GamesApi, "/games")
     api.add_resource(endpoints.GenreApi, "/genre", "/genre/<title>")
-    api.add_resource(endpoints.InitSubgenres, "/subgenres")
     api.add_resource(endpoints.CommentApi, "/comment", "/comment/<game_id>")
+    api.add_resource(endpoints.GameSearch, "/game/search/<search_value>")
+    api.add_resource(endpoints.GameGenreFilter, "/game/filter/<filter_value>")
+    api.add_resource(endpoints.GameAssignGenre, "/game_genre")
 
 
 def register_blueprints(app):
