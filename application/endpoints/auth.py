@@ -27,6 +27,11 @@ def login():
     return jsonify({"token": token.decode("utf-8")})
 
 
+@login_blueprint.route("/logout")
+def logout():
+    return jsonify({"token": ""})
+
+
 def token_required(f):
     def wrapper(self, *args, **kwargs):
         token = request.headers.get("token", "")

@@ -3,7 +3,6 @@ from flask_restful import Api
 
 from application.database import db
 from application import endpoints
-from application.endpoints import login_blueprint
 from config import DevConfig
 
 
@@ -30,4 +29,5 @@ def register_endpoints(api):
 
 
 def register_blueprints(app):
-    app.register_blueprint(login_blueprint)
+    app.register_blueprint(endpoints.login_blueprint)
+    app.register_blueprint(endpoints.index)
