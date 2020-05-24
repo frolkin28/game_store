@@ -6,51 +6,55 @@ Game store
 
 {% block content %}
 
-<div class="container header">
-    <div class="header-logo">
-        <div class="logo">
-            <img src="static/images/logo.png" width="30" height="30"> 
+<div class="container site-area"></div>
+    <div class="container header">
+        <div class="header-logo">
+                <img src="static/images/logo.png" width="30" height="30"> 
+            <div class="logo-title">
+                <h5><a href="#">Game store</a></h1>
+            </div>
         </div>
-        <div class="logo">
-            <h5><a href="#">Game store</a></h1>
+        <div class="navbar">
+            <ul>
+                <li><a href="#">Games</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Support</a></li>
+                <li><a href="#">Sign in</a></li>
+            </ul>
         </div>
     </div>
-    <div class="navbar">
-        <ul>
-            <li><a href="#">Games</a></li>
-            <li><a href="#">Community</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Support</a></li>
-            <li><a href="#">Sign in</a></li>
-        </ul>
-    </div>
-</div>
 
-<div class="container main-area">
-    <div class="container game">
-        <img src="static/images/witcher.jpeg" width="250" height="300">
-        <div class="game-description">
-            <div class="game-price">
-                <h4>$250.00</h5>
-            </div>
-            <button type="button" class="btn btn-success btn-sm buy-button">Buy</button>
-            <div class="game-genre">
-                <h5>RPG</h5>
-            </div>
-            <div class="game-title">
-                <h5>The Witcher3: Wild Hunt</h5>
+    <div class="container main-area">
+        <div class="container game">
+            <img src="static/images/witcher.jpeg" width="250" height="300">
+            <div class="game-description">
+                <div class="game-description-row">
+                    <div class="game-price">
+                        <h5>$250.00</h5>
+                    </div>
+                    <button type="button" class="btn btn-success btn-sm buy-button">Buy</button>
+                </div>
+                <div class="game-description-row">
+                    <div class="game-genre">
+                        <h5>RPG</h5>
+                    </div>
+                    <div class="game-title">
+                        <h5>The Witcher3: Wild Hunt</h5>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container game">
-        <img src="static/images/gta5.jpeg" width="250" height="300">
-    </div>
-    <div class="container game">
-        <img src="static/images/bf4.jpeg" width="250" height="300">
-    </div>
-    <div class="container game">
-        <img src="static/images/odyssey.jpeg" width="250" height="300">
-    </div>
+        <div class="container game">
+            <img src="static/images/gta5.jpeg" width="250" height="300">
+        </div>
+        <div class="container game">
+            <img src="static/images/bf4.jpeg" width="250" height="300">
+        </div>
+        <div class="container game">
+            <img src="static/images/odyssey.jpeg" width="250" height="300">
+        </div>
+</div>
 </div>
 
 
