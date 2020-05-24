@@ -7,7 +7,7 @@ from config import DevConfig
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=None)
     app.config.from_object(DevConfig)
     db.init_app(app)
     api = Api(app, prefix="/api/v1")
