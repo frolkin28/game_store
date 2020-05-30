@@ -1,27 +1,20 @@
 <template>
   <div id="app">
     <Header/>
-    <GamesArea/>
+    <router-view />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Header"
-import GamesArea from "@/components/GamesArea"
 
 export default {
   name: 'App',
   components: {
-    Header,
-    GamesArea
+    Header
   }
 }
+
 </script>
 
-<style>
-
-body {
-    background-color: #000000;
-}
-
-</style>
+<style></style>

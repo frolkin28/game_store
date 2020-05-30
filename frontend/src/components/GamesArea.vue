@@ -1,7 +1,9 @@
 <template>
   <div class="container main-area">
     <div class="container main-area">
-      <Game />
+      <Game 
+        v-for="game of games" :key="game.uuid" 
+        v-bind:game="game"/>
     </div>
   </div>
 </template>
@@ -11,21 +13,21 @@ import Game from "@/components/Game";
 
 export default {
   data() {
-    return {};
+    return {
+      games: []
+    };
   },
   mounted() {
     this.get_games();
   },
   methods: {
     get_games() {
-      fetch('http://127.0.0.1:5000/api/v1/games', {
+      fetch("http://127.0.0.1:5000/api/v1/games", {
         method: "GET"
       })
-        .then(function(res) {
-          return res.json();
-        })
-        .then(function(data) {
-            console.log(data);
+        .then(res => res.json())
+        .then(json_data => {
+          this.games = json_data;
         });
     }
   },
@@ -42,5 +44,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  border-radius: 1%;
 }
 </style>

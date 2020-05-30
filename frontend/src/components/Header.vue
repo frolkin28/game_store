@@ -3,7 +3,7 @@
         <div class="header-logo">
             <img src="@/assets/logo.png" width="30" height="30"> 
             <div class="logo-title">
-                <h5><a href="#">Game store</a></h5>
+                <h5><router-link to="/">Game store</router-link></h5>
             </div>
         </div>
         <div class="navbar">
@@ -12,7 +12,8 @@
                 <li><a href="#">Community</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Support</a></li>
-                <li><a href="#">Sign in</a></li>
+                <li><a href="#">Sign up</a></li>
+                <li><router-link to="/login">Sign in</router-link></li>
             </ul>
         </div>
     </div>
@@ -24,7 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
 
 .header {
     padding: 5px 0px;
@@ -64,8 +65,14 @@ export default {
     flex: 1;
 }
 
-.navbar li:last-child {
+.navbar li:nth-last-of-type(2) {
     flex: 8;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navbar li:nth-last-of-type(1) {
+    flex: 1.1;
     display: flex;
     justify-content: flex-end;
 }
