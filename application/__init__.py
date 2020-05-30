@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
 
 from application.database import db
@@ -13,6 +14,7 @@ def create_app():
     api = Api(app, prefix="/api/v1")
     register_endpoints(api)
     register_blueprints(app)
+    CORS(app, resourses={r"/api/*": {"origins": ["http://localhost:8080"]}})
 
     return app
 

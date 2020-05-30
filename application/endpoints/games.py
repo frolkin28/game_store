@@ -60,6 +60,7 @@ class GameApi(Resource):
 class GamesApi(Resource):
     def get(self):
         games = db.session.query(models.Game).all()
+        print(request.environ['HTTP_ORIGIN'])
         return game_schema.dump(games, many=True), 200
 
 
