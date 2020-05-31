@@ -14,6 +14,8 @@ import Game from "@/components/Game";
 export default {
   data() {
     return {
+      user: localStorage.getItem("user"),
+      token: localStorage.getItem("token"),
       games: []
     };
   },

@@ -8,11 +8,11 @@
         </div>
         <div class="navbar">
             <ul>
-                <li><a href="#">Games</a></li>
+                <li><router-link to="/">Games</router-link></li>
                 <li><a href="#">Community</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Support</a></li>
-                <li><a href="#">Sign up</a></li>
+                <li><router-link to="/sign_up">Sign up</router-link></li>
                 <li><router-link to="/login">Sign in</router-link></li>
             </ul>
         </div>
@@ -21,7 +21,12 @@
 
 <script>
 export default {
-    
+    data(){
+        return {
+            user: localStorage.getItem("user"),
+            token: localStorage.getItem("token")
+        }
+    }
 }
 </script>
 

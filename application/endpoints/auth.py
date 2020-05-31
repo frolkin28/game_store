@@ -6,8 +6,11 @@ from werkzeug.security import check_password_hash
 from application import models
 from config import BaseConfig, RolesEnum
 from application.database import db
+from application import schemas
 
 login_blueprint = Blueprint("login", __name__)
+
+user_schema = schemas.UserGetSchema()
 
 
 @login_blueprint.route("/login")
@@ -15,7 +18,7 @@ def login():
     email = request.authorization.get("username", "")
     password = request.authorization.get("password", "")
     user = db.session.query(models.User).filter_by(email=email).first()
-    if not user or check_password_hash(user.password, password):
+    if not user or not check_password_hash(user.password, password):
         return "", 401, {"WWW-Authenticate": 'Basic realm="Authentication required"'}
     token = jwt.encode(
         {
@@ -24,7 +27,10 @@ def login():
         },
         BaseConfig.SECRET_KEY,
     )
-    return jsonify({"token": token.decode("utf-8")})
+    return jsonify({
+        "token": token.decode("utf-8"),
+        "user": user_schema.dump(user)
+    })
 
 
 @login_blueprint.route("/logout")

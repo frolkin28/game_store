@@ -5,7 +5,9 @@ import Main from '@/components/Main'
 Vue.use(Router)
 
 
-export default new Router({
+
+
+let router = new Router({
     mode: 'history',
     routes: [
         {
@@ -15,6 +17,17 @@ export default new Router({
         {
             path: '/login',
             component: () => import('@/components/SignIn.vue')
+        },
+        {
+            path: '/sign_up',
+            component: () => import('@/components/SignUp.vue')
         }
     ]
 })
+
+// router.beforeEach((to, from, next) => {
+
+// }_
+// )
+
+export default router;
