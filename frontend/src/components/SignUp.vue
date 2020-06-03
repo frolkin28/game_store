@@ -1,16 +1,16 @@
 <template>
     <div class="wrapper fadeInDown">
         <div id="formContent">
-            <!-- Tabs Titles -->
             <h2 class="inactive underlineHover"><router-link to="/login">Sign In</router-link></h2>
             <h2 class="active"><router-link to="#">Sign Up</router-link></h2>
 
-            <!-- Login Form -->
-            <form>
-              <input type="text" id="login" class="fadeIn second" name="login" placeholder="email">
-              <input type="text" id="first_name" class="fadeIn second" name="first_name" placeholder="first name">
-              <input type="text" id="second_name" class="fadeIn third" name="second_name" placeholder="second name">
-              <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+            <div class="alert alert-danger" role="alert" v-if="message">{{message}}</div>
+
+            <form method="POST" @submit.prevent="make_request">
+              <input type="text" id="email" class="fadeIn second" name="email" placeholder="email" v-model="email">
+              <input type="text" id="first_name" class="fadeIn second" name="first_name" placeholder="first name" v-model="first_name">
+              <input type="text" id="second_name" class="fadeIn third" name="second_name" placeholder="second name" v-model="second_name">
+              <input type="password" id="password" class="fadeIn third" name="password" placeholder="password" v-model="password">
               <input type="submit" class="fadeIn fourth" value="Sign Up">
             </form>
 
@@ -20,7 +20,55 @@
 
 <script>
 export default {
-    
+    data() {
+      return {
+        email: "",
+        first_name: "",
+        second_name: "",
+        password: "",
+        message: ""
+      }
+    },
+    methods: {
+      make_request() {
+        let email = this.email;
+        let first_name = this.first_name;
+        let second_name = this.second_name;
+        let password = this.password;
+        let ok = true;
+        
+        if (email.length && first_name.length && second_name.length && password.length) {
+          fetch("http://127.0.0.1:5000/api/v1/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                first_name: first_name,
+                second_name: second_name,
+                password: password
+            })
+          })
+          .then(res => {
+            if (res.status > 299) {
+                ok = false
+            }
+            return res.json();   
+          })
+          .then( data => {
+              if (ok) {
+                this.message = "";
+                this.$router.push('/');
+              }
+              else {
+                this.message = data.message
+              }
+            }
+          )
+        }
+      }
+    }
 }
 </script>
 
@@ -44,10 +92,6 @@ h2 {
   margin: 40px 8px 10px 8px; 
   color: #cccccc;
 }
-
-
-
-/* STRUCTURE */
 
 .wrapper {
   display: flex;
@@ -73,19 +117,6 @@ h2 {
   text-align: center;
 }
 
-/* #formFooter {
-  background-color: #f6f6f6;
-  border-top: 1px solid #dce8f1;
-  padding: 25px;
-  text-align: center;
-  -webkit-border-radius: 0 0 10px 10px;
-  border-radius: 0 0 10px 10px;
-} */
-
-
-
-/* TABS */
-
 h2.inactive {
   color: #cccccc;
 }
@@ -94,10 +125,6 @@ h2.active {
   color: #0d0d0d;
   border-bottom: 2px solid #5fbae9;
 }
-
-
-
-/* FORM TYPOGRAPHY*/
 
 input[type=button], input[type=submit], input[type=reset]  {
   background-color: #56baed;
@@ -164,10 +191,6 @@ input[type=text]:placeholder, input[type=password]:placeholder {
 }
 
 
-
-/* ANIMATIONS */
-
-/* Simple CSS3 Fade-in-down Animation */
 .fadeInDown {
   -webkit-animation-name: fadeInDown;
   animation-name: fadeInDown;
@@ -247,7 +270,6 @@ input[type=text]:placeholder, input[type=password]:placeholder {
   animation-delay: 1s;
 }
 
-/* Simple CSS3 Fade-in Animation */
 .underlineHover:after {
   display: block;
   left: 0;
@@ -266,10 +288,6 @@ input[type=text]:placeholder, input[type=password]:placeholder {
 .underlineHover:hover:after{
   width: 100%;
 }
-
-
-
-/* OTHERS */
 
 *:focus {
     outline: none;

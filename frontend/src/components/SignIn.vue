@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper fadeInDown">
     <div id="formContent">
-      <!-- Tabs Titles -->
       <h2 class="active">
         <router-link to="/login">Sign In</router-link>
       </h2>
@@ -11,24 +10,9 @@
 
       <div class="alert alert-danger" role="alert" v-if="getRetry">Wrong email or login</div>
 
-      <!-- Login Form -->
       <form method="POST" @submit.prevent="make_request">
-        <input
-          type="text"
-          id="email"
-          class="fadeIn second"
-          name="email"
-          placeholder="email"
-          v-model="email"
-        />
-        <input
-          type="password"
-          id="password"
-          class="fadeIn third"
-          name="password"
-          placeholder="password"
-          v-model="password"
-        />
+        <input type="text" id="email" class="fadeIn second" name="email" placeholder="email" v-model="email"/>
+        <input type="password" id="password" class="fadeIn third" name="password" placeholder="password" v-model="password"/>
         <input type="submit" class="fadeIn fourth" value="Log In" />
       </form>
     </div>

@@ -4,9 +4,6 @@ import Main from '@/components/Main'
 
 Vue.use(Router)
 
-
-
-
 let router = new Router({
     mode: 'history',
     routes: [
@@ -21,6 +18,10 @@ let router = new Router({
         {
             path: '/sign_up',
             component: () => import('@/components/SignUp.vue')
+        },
+        {
+            path: '/game/:uuid',
+            component: () => import('@/components/GamePage.vue')
         }
     ]
 })

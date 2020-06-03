@@ -17,7 +17,9 @@
             </div>
             <div class="game-description-row">
                 <div class="game-title">
-                    <h5>{{ game.title }}</h5>
+                    <router-link :to="'/game/' + game.uuid">
+                        <h5>{{ game.title }}</h5>
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -106,6 +108,11 @@ export default {
     flex: 2;
     font-weight: bolder;
     align-self: center;
+}
+
+.game-title a {
+    text-decoration: none;
+    color: #ffffff;
 }
 
 </style>
