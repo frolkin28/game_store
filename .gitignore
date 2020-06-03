@@ -5,3 +5,4 @@ __pycache__/
 setup_ex
 migrations/
 setup_ex
+npm-debug.log

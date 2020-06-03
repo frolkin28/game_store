@@ -9,65 +9,65 @@
         <router-link to="/sign_up">Sign Up</router-link>
       </h2>
 
-      <div class="alert alert-danger" role="alert" v-if="retry">
-        Wrong email or login
-      </div>
+      <div class="alert alert-danger" role="alert" v-if="getRetry">Wrong email or login</div>
 
       <!-- Login Form -->
-      <form method="POST">
-        <input type="text" id="email" class="fadeIn second" name="email" placeholder="email" v-model="email" />
-        <input type="password" id="password" class="fadeIn third" name="password" placeholder="password" v-model="password"/>
-        <input type="submit" class="fadeIn fourth" value="Log In" @click="make_request" />
+      <form method="POST" @submit.prevent="make_request">
+        <input
+          type="text"
+          id="email"
+          class="fadeIn second"
+          name="email"
+          placeholder="email"
+          v-model="email"
+        />
+        <input
+          type="password"
+          id="password"
+          class="fadeIn third"
+          name="password"
+          placeholder="password"
+          v-model="password"
+        />
+        <input type="submit" class="fadeIn fourth" value="Log In" />
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-      retry: false
+  computed: {
+    ...mapGetters(['getRetry']),
+    email: {
+      get() {
+        return this.$store.state.email;
+      },
+      set(value) {
+        this.$store.commit("updateEmail", value);
+      }
+    },
+    password: {
+      get() {
+        return this.$store.state.password;
+      },
+      set(value) {
+        this.$store.commit("updatePassword", value);
+      }
     }
   },
   methods: {
-    make_request(e) {
-      e.preventDefault()
-      var email = this.email;
-      var password = this.password;
-      if (this.email.length > 0 && this.password.length > 0){
-        fetch("http://127.0.0.1:5000/login", {
-          method: "GET",
-          headers: {
-            Authorization: "Basic " + btoa(`${email}:${password}`)
-          }
-        })
-          .then(res => {
-            if (res. status < 299){
-              this.retry = false;
-              return res.json();
-            }
-            else {
-              this.retry = true;
-            }
-          })
-          .then(data => {
-            if (data){
-              console.log(data);
-              this.email = "";
-              this.password = "";
-              localStorage.setItem("user", JSON.stringify(data.user));
-              localStorage.setItem("token", JSON.stringify(data.token));
-              this.$router.push('/');
-            }
-          });
+    ...mapActions(["fetchLogin"]),
+    make_request() {
+      this.fetchLogin();
+      if (!this.getRetry) {
+        this.$router.push("/");
       }
     }
   }
 };
-
 </script>
 
 <style scoped>
