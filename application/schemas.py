@@ -41,8 +41,15 @@ class GenreGetSchema(SQLAlchemyAutoSchema):
         exclude = ("id", "games", "parent_genre")
 
 
+class GamePhotoSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = models.GamePhoto
+        exclude = ("game", "game_id")
+
+
 class GameSchema(SQLAlchemyAutoSchema):
     genres = fields.Nested(GenreGetSchema, many=True)
+    game_photo = fields.Nested(GamePhotoSchema)
 
     class Meta:
         model = models.Game

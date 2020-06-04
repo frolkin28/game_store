@@ -1,7 +1,6 @@
 <template>
     <div class="main-area container">
         <div class="image">
-            <img src="static/images/witcher.jpeg">
         </div>
         <div class="title-section">
             <div class="title-price">
@@ -31,7 +30,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-
 export default {
     mounted() {
         let uuid = this.$route.params.uuid;
@@ -47,7 +45,6 @@ export default {
 </script>
 
 <style scoped>
-
 .main-area {
   background-color: #2c2c2c;
   padding: 20px 30px;
@@ -57,44 +54,36 @@ export default {
   justify-content: center;
   color: #ffffff;
 }
-
 .image {
     width: 100%;
     margin-bottom: 30px;
 }
-
 .title-section {
     flex: 1;
     display: flex;
     flex-direction: row;
 }
-
 .title-price {
     flex: 1;
 }
-
 .buy-button {
     flex: 1;
     display: flex;
     justify-content: flex-end;
 }
-
 .buy-button button {
     height: 50%;
     width: 30%;
 }
-
 .title-price h4{
     font-weight: bolder;
 }
-
  hr {
     border: none; /* Убираем границу для браузера Firefox */
     color: #ffffff; /* Цвет линии для остальных браузеров */
     background-color:#ffffff; /* Цвет линии для браузера Firefox и Opera */
     height: 1px
 }
-
 .genres-section {
     flex: 1;
     display: flex;
@@ -102,21 +91,16 @@ export default {
     flex-wrap: wrap;
     justify-content: space-around;
 }
-
 .genre {
     flex: 1;
     justify-content: flex-start;
 }
-
 .genre h5{
     font-style: italic;
     font-size: 14px;
 }
-
 .discription-section {
     padding-top: 50px;
     flex: 1;
 }
-
-
 </style>

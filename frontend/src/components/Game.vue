@@ -1,6 +1,6 @@
 <template>
     <div class="container game">
-        <img src="static/images/witcher.jpeg" width="250" height="300">
+        <img :src="`data:image/jpeg;base64,${image}`" width="250" height="300">
         <div class="game-description">
             <div class="game-description-row">
                 <div class="game-price">
@@ -27,10 +27,33 @@
 </template>
 
 <script>
+
 export default {
+    data() {
+        return {
+            image: null
+        }
+    },
     props: {
         game: {require: true}
-    }
+    },
+    mounted() {
+        this.fetchImage();
+    },
+    methods: {
+        fetchImage() {
+            let url = this.game.game_photo.url;
+            fetch(`http://127.0.0.1:5000/api/v1${url}`, {
+                method: "GET"
+            })
+            .then(res => {
+                return res.json();
+            })
+            .then(json_data => {
+                this.image = json_data.image;
+            });  
+        }
+    },
 }
 </script>
 

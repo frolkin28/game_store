@@ -28,6 +28,7 @@ def register_endpoints(api):
     api.add_resource(endpoints.GameSearch, "/game/search/<search_value>")
     api.add_resource(endpoints.GameGenreFilter, "/game/filter/<filter_value>")
     api.add_resource(endpoints.GameAssignGenre, "/game_genre")
+    api.add_resource(endpoints.GamePhoto, "/game_photo", "/game_photo/<id>")
 
 
 def register_blueprints(app):

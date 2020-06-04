@@ -77,9 +77,6 @@ class Comment(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.Integer, primary_key=True)
-    time_left = db.Column(
-        db.DateTime, nullable=False, default=datetime.datetime.utcnow
-    )
     content = db.Column(db.Text(length=600))
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = db.relationship("User")
@@ -114,9 +111,9 @@ class GamePhoto(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     path = db.Column(db.String(255), unique=True)
-    url = db.Column(db.String(255))
+    url = db.Column(db.Text())
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
-    game = db.relationship("Game")
+    game = db.relationship("Game", uselist=False, backref=db.backref("game_photo", uselist=False))
 
 
 class AvatarImage(db.Model):

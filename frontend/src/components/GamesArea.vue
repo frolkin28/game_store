@@ -1,26 +1,37 @@
 <template>
   <div class="container main-area">
     <div class="container main-area">
-        <Game 
-          v-for="game of getGames" :key="game.uuid" 
-          v-bind:game="game"/>
+      <Game 
+        v-for="game of games" :key="game.uuid" 
+        v-bind:game="game"/>
     </div>
   </div>
 </template>
 
 <script>
 import Game from "@/components/Game";
-import { mapGetters, mapActions } from "vuex";
 
 export default {
-  computed: {
-    ...mapGetters(['getGames'])
+  data() {
+    return {
+      user: localStorage.getItem("user"),
+      token: localStorage.getItem("token"),
+      games: []
+    };
   },
   mounted() {
-    this.fetchGames();
+    this.get_games();
   },
   methods: {
-    ...mapActions(['fetchGames'])
+    get_games() {
+      fetch("http://127.0.0.1:5000/api/v1/games", {
+        method: "GET"
+      })
+        .then(res => res.json())
+        .then(json_data => {
+          this.games = json_data;
+        });
+    }
   },
   components: {
     Game
