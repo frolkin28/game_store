@@ -24,6 +24,7 @@
         </li>
         <li>
           <div v-if="getToken">
+            <div><router-link to="/card">{{getAmountGames}}</router-link></div>
             <div>
               {{ getUser.first_name }}
               {{ getUser.second_name }}
@@ -49,7 +50,7 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   
   computed: {
-    ...mapGetters(['getUser', 'getToken'])
+    ...mapGetters(['getUser', 'getToken', 'getAmountGames'])
   },
   methods: {
     ...mapMutations(['updateUser', 'updateToken']),
@@ -107,6 +108,13 @@ export default {
   flex: 8;
   display: flex;
   justify-content: flex-end;
+}
+
+.navbar li:nth-last-of-type(1) div:nth-of-type(1) {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
 }
 
 .navbar a {

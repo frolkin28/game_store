@@ -22,6 +22,10 @@ let router = new Router({
         {
             path: '/game/:uuid',
             component: () => import('@/components/GamePage.vue')
+        },
+        {
+            path: '/card',
+            component: () => import('@/components/Card.vue')
         }
     ]
 })

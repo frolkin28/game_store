@@ -7,7 +7,7 @@
                 <h4>{{ getGame.title }}</h4>
                 <h5>${{ getGame.price }}</h5>
             </div>
-            <div class="buy-button">
+            <div class="buy-button" @click="makeOrder">
                 <button type="button" class="btn btn-success">Buy</button>
             </div>
         </div>
@@ -36,10 +36,16 @@ export default {
         this.fetchGame(uuid);
     },
     computed: {
-        ...mapGetters(['getGame'])
+        ...mapGetters(['getGame', 'getToken'])
     },
     methods: {
-        ...mapActions(['fetchGame'])
+        ...mapActions(['fetchGame']),
+        ...mapActions(['orderGame']),
+        makeOrder(){
+            if (this.getToken) {
+                this.orderGame(this.getGame);
+            }
+        },
     }
 }
 </script>
@@ -53,6 +59,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   color: #ffffff;
+  border-radius: 1%;
 }
 .image {
     width: 100%;

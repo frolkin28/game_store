@@ -7,7 +7,7 @@
                     <h5>${{ game.price }}</h5>
                 </div>
                 <div class="buy-button">
-                    <button type="button" class="btn btn-success btn-sm">Buy</button>
+                    <button type="button" class="btn btn-success btn-sm" @click="makeOrder">Buy</button>
                 </div>
             </div>
             <div class="game-description-row">
@@ -27,12 +27,16 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data() {
         return {
             image: null
         }
+    },
+    computed: {
+        ...mapGetters(['getToken'])
     },
     props: {
         game: {require: true}
@@ -41,6 +45,12 @@ export default {
         this.fetchImage();
     },
     methods: {
+        ...mapActions(['orderGame']),
+        makeOrder(){
+            if (this.getToken) {
+                this.orderGame(this.game);
+            }
+        },
         fetchImage() {
             let url = this.game.game_photo.url;
             fetch(`http://127.0.0.1:5000/api/v1${url}`, {
