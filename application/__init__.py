@@ -33,4 +33,3 @@ def register_endpoints(api):
 
 def register_blueprints(app):
     app.register_blueprint(endpoints.login_blueprint)
-    app.register_blueprint(endpoints.index)

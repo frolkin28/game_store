@@ -19,4 +19,4 @@ class BaseConfig:
 class DevConfig(BaseConfig):
     DEBUG = True
     ENV = "development"
-    SQLALCHEMY_DATABASE_URI = f"postgresql://postgres:{os.getenv('POSTGRES_PASSWORD')}@localhost:5434/game_store"
+    SQLALCHEMY_DATABASE_URI = f"postgresql://postgres:{os.getenv('POSTGRES_PASSWORD')}@localhost:{os.getenv('POSTGRES_PORT')}/game_store"
